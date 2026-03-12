@@ -49,12 +49,14 @@
  */
 import Dashboard from './pages/Dashboard';
 import Signals from './pages/Signals';
+import Kinect from './pages/Kinect';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "Dashboard": Dashboard,
     "Signals": Signals,
+    "Kinect": Kinect,
 }
 
 export const pagesConfig = {
