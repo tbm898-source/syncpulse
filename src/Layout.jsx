@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Radio, Sliders, Cpu, Tv2, LayoutDashboard, ChevronLeft, ChevronRight, Zap } from "lucide-react";
+import { Radio, Sliders, Cpu, Tv2, LayoutDashboard, ChevronLeft, ChevronRight, Zap, Music2 } from "lucide-react";
 
 const navItems = [
   { label: "Command", page: "Dashboard", icon: LayoutDashboard },
   { label: "Signals", page: "Signals", icon: Sliders },
+  { label: "MIDI", page: "MidiManager", icon: Music2 },
   { label: "Kinect", page: "Kinect", icon: Cpu },
   { label: "Platforms", page: "Platforms", icon: Tv2 },
   { label: "Go Live", page: "GoLive", icon: Radio },
