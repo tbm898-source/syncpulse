@@ -127,29 +127,13 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* OSC Console */}
+        {/* OSC + Resolume */}
         <div className="lg:col-span-1 flex flex-col gap-4">
           <OSCConsole resolumeHost={session?.resolume_host} resolumePort={session?.resolume_port} />
-          <div className="bg-[#111118] border border-[#1e1e2e] rounded-xl p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <Clock className="w-3.5 h-3.5 text-cyan-400" />
-              <span className="text-xs text-gray-500 uppercase tracking-widest font-medium">Resolume</span>
-            </div>
-            <div className="space-y-2 text-xs font-mono">
-              <div className="flex justify-between">
-                <span className="text-gray-500">Host</span>
-                <span className="text-cyan-300">{session?.resolume_host || "localhost"}:{session?.resolume_port || 7000}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-500">OSC In</span>
-                <span className="text-cyan-300">:{session?.osc_port || 8000}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-500">Composition</span>
-                <span className={isLive ? "text-green-400" : "text-gray-600"}>{isLive ? "Connected" : "Standby"}</span>
-              </div>
-            </div>
-          </div>
+          <ResolumePanel
+            host={session?.resolume_host || "localhost"}
+            port={8080}
+          />
         </div>
       </div>
     </div>
