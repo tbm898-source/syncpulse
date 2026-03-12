@@ -48,21 +48,21 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import Dashboard from './pages/Dashboard';
-import Signals from './pages/Signals';
-import Kinect from './pages/Kinect';
-import Platforms from './pages/Platforms';
 import GoLive from './pages/GoLive';
+import Kinect from './pages/Kinect';
 import MidiManager from './pages/MidiManager';
+import Platforms from './pages/Platforms';
+import Signals from './pages/Signals';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "Dashboard": Dashboard,
-    "Signals": Signals,
-    "Kinect": Kinect,
-    "Platforms": Platforms,
     "GoLive": GoLive,
+    "Kinect": Kinect,
     "MidiManager": MidiManager,
+    "Platforms": Platforms,
+    "Signals": Signals,
 }
 
 export const pagesConfig = {

@@ -35,6 +35,8 @@ export default function MidiManager() {
   const [saving, setSaving] = useState(false);
   const [pushLog, setPushLog] = useState([]);
   const [pushing, setPushing] = useState(false);
+  const [resolumeHost, setResolumeHost] = useState("localhost");
+  const [resolumePort, setResolumePort] = useState(8080);
 
   const load = () => base44.entities.MidiMapping.list("-created_date").then(setMappings);
 
