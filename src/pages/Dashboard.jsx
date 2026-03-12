@@ -8,6 +8,7 @@ import AudioVisualizer from "../components/flux/AudioVisualizer";
 import PointCloudCanvas from "../components/flux/PointCloudCanvas";
 import OSCConsole from "../components/flux/OSCConsole";
 import PlatformBadge from "../components/flux/PlatformBadge";
+import ResolumePanel from "../components/flux/ResolumePanel";
 
 export default function Dashboard() {
   const [session, setSession] = useState(null);
