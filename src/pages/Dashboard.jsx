@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Radio, Zap, Clock, Activity } from "lucide-react";
+import { Radio, Zap, Activity } from "lucide-react";
 import SignalCard from "../components/flux/SignalCard";
 import AudioVisualizer from "../components/flux/AudioVisualizer";
 import PointCloudCanvas from "../components/flux/PointCloudCanvas";
