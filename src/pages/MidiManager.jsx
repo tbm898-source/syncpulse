@@ -62,37 +62,38 @@ export default function MidiManager() {
     load();
   };
 
-  // Test-fire a single mapping as OSC via backend
+  // Send directly to Resolume REST API from the browser
+  const sendToResolume = async (address, value) => {
+    const base = `http://${resolumeHost}:${resolumePort}/api/v1`;
+    const isConnect = address.endsWith("/connect");
+    const method = isConnect ? "POST" : "PUT";
+    const body = isConnect ? null : JSON.stringify({ value: Number(value) });
+    const res = await fetch(`${base}${address}`, {
+      method,
+      headers: body ? { "Content-Type": "application/json" } : {},
+      body,
+    });
+    return res.ok;
+  };
+
+  // Test-fire a single mapping directly from browser → Resolume
   const handleFire = async (m) => {
     const oscAddress = buildOscAddress(m);
     const logEntry = { id: Date.now(), address: oscAddress, mapping: m.name, ok: null };
     setPushLog(prev => [logEntry, ...prev.slice(0, 19)]);
-    const res = await base44.functions.invoke("oscBridge", {
-      host: "localhost",
-      port: 8000,
-      address: oscAddress,
-      value: m.value_max,
-    });
-    setPushLog(prev => prev.map(e => e.id === logEntry.id ? { ...e, ok: res.data?.ok ?? false } : e));
+    const ok = await sendToResolume(oscAddress, m.value_max).catch(() => false);
+    setPushLog(prev => prev.map(e => e.id === logEntry.id ? { ...e, ok } : e));
   };
 
-  // Push all enabled mappings as OSC registration commands
+  // Push all enabled mappings directly from browser → Resolume
   const handlePushAll = async () => {
     setPushing(true);
     const enabled = mappings.filter(m => m.enabled);
-    const newLogs = [];
     for (const m of enabled) {
       const oscAddress = buildOscAddress(m);
       const logEntry = { id: Date.now() + Math.random(), address: oscAddress, mapping: m.name, ok: null };
-      newLogs.push(logEntry);
       setPushLog(prev => [logEntry, ...prev].slice(0, 20));
-      const res = await base44.functions.invoke("oscBridge", {
-        host: "localhost",
-        port: 8000,
-        address: oscAddress,
-        value: m.value_min,
-      });
-      const ok = res.data?.ok ?? false;
+      const ok = await sendToResolume(oscAddress, m.value_min).catch(() => false);
       setPushLog(prev => prev.map(e => e.id === logEntry.id ? { ...e, ok } : e));
     }
     setPushing(false);
