@@ -145,6 +145,25 @@ export default function MidiManager() {
         </div>
       </div>
 
+      {/* Resolume connection */}
+      <div className="flex items-center gap-3 bg-[#111118] border border-[#1e1e2e] rounded-lg px-4 py-2">
+        <span className="text-xs text-gray-500 uppercase tracking-widest flex-shrink-0">Resolume</span>
+        <input
+          className="bg-transparent border-b border-gray-700 text-sm text-white font-mono w-32 focus:outline-none focus:border-cyan-500"
+          value={resolumeHost}
+          onChange={e => setResolumeHost(e.target.value)}
+          placeholder="localhost"
+        />
+        <span className="text-gray-600">:</span>
+        <input
+          type="number"
+          className="bg-transparent border-b border-gray-700 text-sm text-white font-mono w-16 focus:outline-none focus:border-cyan-500"
+          value={resolumePort}
+          onChange={e => setResolumePort(Number(e.target.value))}
+        />
+        <span className="text-xs text-gray-600 ml-auto">direct browser → Resolume REST</span>
+      </div>
+
       {/* Add form */}
       {showForm && (
         <div className="bg-[#111118] border border-cyan-500/20 rounded-xl p-5 space-y-4">
