@@ -50,6 +50,7 @@
 import Dashboard from './pages/Dashboard';
 import Signals from './pages/Signals';
 import Kinect from './pages/Kinect';
+import Platforms from './pages/Platforms';
 import __Layout from './Layout.jsx';
 
 
@@ -57,6 +58,7 @@ export const PAGES = {
     "Dashboard": Dashboard,
     "Signals": Signals,
     "Kinect": Kinect,
+    "Platforms": Platforms,
 }
 
 export const pagesConfig = {
