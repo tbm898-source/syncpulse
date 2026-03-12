@@ -52,6 +52,7 @@ import Signals from './pages/Signals';
 import Kinect from './pages/Kinect';
 import Platforms from './pages/Platforms';
 import GoLive from './pages/GoLive';
+import MidiManager from './pages/MidiManager';
 import __Layout from './Layout.jsx';
 
 
@@ -61,6 +62,7 @@ export const PAGES = {
     "Kinect": Kinect,
     "Platforms": Platforms,
     "GoLive": GoLive,
+    "MidiManager": MidiManager,
 }
 
 export const pagesConfig = {
