@@ -5,6 +5,7 @@ import { Cpu, RefreshCw } from "lucide-react";
 
 export default function Kinect() {
   const [enabled, setEnabled] = useState(false);
+  const [oscTest, setOscTest] = useState(null);
   const [settings, setSettings] = useState({
     depthMin: 0.5,
     depthMax: 4.5,
@@ -106,9 +107,44 @@ export default function Kinect() {
             <div className="mt-1 space-y-2">
               <input value={settings.oscBridge} onChange={e => update("oscBridge", e.target.value)}
                 className="w-full bg-[#0a0a0f] border border-[#1e1e2e] rounded px-2 py-1.5 text-xs font-mono text-cyan-300 outline-none" />
-              <button className="w-full flex items-center justify-center gap-1.5 py-1.5 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs rounded hover:bg-cyan-500/20 transition-all">
+              <button
+                type="button"
+                onClick={async () => {
+                  setOscTest("…");
+                  const [h, p] = settings.oscBridge.split(":").map((s) => s.trim());
+                  const host = h || "localhost";
+                  const port = parseInt(p || "8001", 10) || 8001;
+                  try {
+                    const ctrl = new AbortController();
+                    const t = setTimeout(() => ctrl.abort(), 2500);
+                    const r = await fetch(`http://${host}:${port}/`, {
+                      method: "GET",
+                      mode: "cors",
+                      signal: ctrl.signal,
+                    }).catch(() => null);
+                    clearTimeout(t);
+                    if (r && r.ok) setOscTest(`HTTP OK from ${host}:${port}`);
+                    else
+                      setOscTest(
+                        `No HTTP on ${host}:${port} (normal if bridge is UDP-only). Resolume Web API: try Dashboard with port 8080 or VITE_RESOLUME_PROXY_PREFIX.`,
+                      );
+                  } catch {
+                    setOscTest(
+                      `Could not reach ${host}:${port} over HTTP. OSC is usually UDP—confirm your bridge app is running.`,
+                    );
+                  }
+                }}
+                className="w-full flex items-center justify-center gap-1.5 py-1.5 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs rounded hover:bg-cyan-500/20 transition-all"
+              >
                 <RefreshCw className="w-3 h-3" /> Test Connection
               </button>
+              {oscTest && (
+                <p className="text-[10px] text-gray-500 leading-snug">{oscTest}</p>
+              )}
+              <p className="text-[10px] text-gray-600 leading-snug">
+                Flux UI here is the <span className="text-gray-500">syncpulse</span> Resolume helpers; Web Remote defaults to{" "}
+                <span className="font-mono text-cyan-600/80">8080</span> (see .env.example).
+              </p>
             </div>
           </SignalCard>
         </div>

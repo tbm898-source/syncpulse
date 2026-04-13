@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
+import { getResolumeApiBase } from "@/lib/resolumeApi";
 import { Plus, Music2, Send, RefreshCw, CheckCircle2, XCircle } from "lucide-react";
 import MidiMappingRow from "../components/flux/MidiMappingRow";
 
@@ -64,7 +65,7 @@ export default function MidiManager() {
 
   // Send directly to Resolume REST API from the browser
   const sendToResolume = async (address, value) => {
-    const base = `http://${resolumeHost}:${resolumePort}/api/v1`;
+    const base = getResolumeApiBase(resolumeHost, resolumePort);
     const isConnect = address.endsWith("/connect");
     const method = isConnect ? "POST" : "PUT";
     const body = isConnect ? null : JSON.stringify({ value: Number(value) });

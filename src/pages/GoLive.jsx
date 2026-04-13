@@ -39,9 +39,10 @@ export default function GoLive() {
       milkdrop_enabled: form.milkdrop_enabled,
       audio_enabled: form.audio_enabled,
       started_at: new Date().toISOString(),
+      // resolume_port = Web Remote HTTP API (default 8080 in Resolume). NOT OSC (often 7000 UDP).
       resolume_host: "localhost",
-      resolume_port: 7000,
-      osc_port: 8000,
+      resolume_port: 8080,
+      osc_port: 7000,
     });
     setSession(s);
     setLoading(false);

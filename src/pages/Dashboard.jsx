@@ -40,6 +40,14 @@ export default function Dashboard() {
   const isLive = session?.status === "live";
   const formatUptime = (s) => `${String(Math.floor(s / 3600)).padStart(2, "0")}:${String(Math.floor((s % 3600) / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
 
+  // Older sessions saved OSC port (7000) as resolume_port; Web Remote HTTP is normally 8080.
+  const legacyOscStoredAsResolume =
+    session?.resolume_port === 7000 && session?.osc_port == null;
+  const resolumeWebPort = legacyOscStoredAsResolume
+    ? 8080
+    : (session?.resolume_port ?? 8080);
+  const oscUdpPort = session?.osc_port ?? 7000;
+
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -129,10 +137,10 @@ export default function Dashboard() {
 
         {/* OSC + Resolume */}
         <div className="lg:col-span-1 flex flex-col gap-4">
-          <OSCConsole resolumeHost={session?.resolume_host} resolumePort={session?.resolume_port} />
+          <OSCConsole resolumeHost={session?.resolume_host} resolumePort={oscUdpPort} />
           <ResolumePanel
             host={session?.resolume_host || "localhost"}
-            port={8080}
+            port={resolumeWebPort}
           />
         </div>
       </div>

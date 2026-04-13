@@ -1,39 +1,57 @@
-**Welcome to your Base44 project** 
+# SyncPulse
 
-**About**
+Live show **control dashboard** (Vite + React + Base44): preflight, platforms, Kinect UI, Go Live session, **Resolume Arena** Web Remote panel, MIDI mapping helpers.
 
-View and Edit  your app on [Base44.com](http://Base44.com) 
+**Production (Base44):** [https://sync-pulse-stream.base44.app](https://sync-pulse-stream.base44.app)  
+*(Resolume “Connected” only works when the browser can reach your Resolume Web Remote — usually same PC + proxy, or a tunnel; see Setup below.)*
 
-This project contains everything you need to run your app locally.
+**You still run** Processing + Kinect + Spout → Resolume; this app is the **browser shell** around the workflow.
 
-**Edit the code in your local development environment**
+## Prerequisites
 
-Any change pushed to the repo will also be reflected in the Base44 Builder.
+- Node 18+  
+- [Base44](https://base44.com) app (for entities / backend) or adapt client for your API  
+- **Resolume Arena** with **Web Remote** enabled (default HTTP **8080**; OSC is separate, often **7000** UDP)
 
-**Prerequisites:** 
+## Setup
 
-1. Clone the repository using the project's Git URL 
-2. Navigate to the project directory
-3. Install dependencies: `npm install`
-4. Create an `.env.local` file and set the right environment variables
+1. Clone and `cd` into the repo
+2. `npm install`
+3. Copy `.env.example` to `.env.local` and set:
 
-```
+```env
 VITE_BASE44_APP_ID=your_app_id
-VITE_BASE44_APP_BASE_URL=your_backend_url
-
-e.g.
-VITE_BASE44_APP_ID=cbef744a8545c389ef439ea6
-VITE_BASE44_APP_BASE_URL=https://my-to-do-list-81bfaad7.base44.app
+VITE_BASE44_APP_BASE_URL=https://your-app.base44.app
 ```
 
-Run the app: `npm run dev`
+1. **Local Resolume without CORS pain:** add to `.env.local`:
 
-**Publish your changes**
+```env
+VITE_RESOLUME_PROXY_PREFIX=/resolume-api
+```
 
-Open [Base44.com](http://Base44.com) and click on Publish.
+Then `npm run dev` — Vite proxies `/resolume-api` → `http://127.0.0.1:8080`.
 
-**Docs & Support**
+1. Open the app URL from the terminal (usually `http://localhost:5173`).
 
-Documentation: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)
+## Useful routes
 
-Support: [https://app.base44.com/support](https://app.base44.com/support)
+- **Dashboard** — command center, Resolume panel, audio/Kinect previews when session is live  
+- **Go Live** — session create; new sessions use `resolume_port: 8080` and `osc_port: 7000`  
+- **Kinect** — controls + OSC bridge test note
+
+## Publish (Base44)
+
+Push to GitHub and use **Publish** in the Base44 builder, or your linked workflow.
+
+## Docs
+
+- [Base44 + GitHub](https://docs.base44.com/Integrations/Using-GitHub)  
+- [Base44 support](https://app.base44.com/support)
+
+## Digital product / license (if you sell this template)
+
+**Suggested support line:**  
+*“Digital template: refund within 14 days if you cannot run `npm install && npm run dev` after following this README and `.env.example`; support via seller email.”*
+
+Replace Base44 env values with **your** app or document a fork path if buyers self-host without Base44.

@@ -5,6 +5,18 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   logLevel: 'error', // Suppress warnings, only show errors
+  server: {
+    proxy: {
+      // Same-origin proxy so the browser can reach Resolume Web API without CORS (local dev).
+      // Set VITE_RESOLUME_PROXY_PREFIX=/resolume-api in .env.local and use default host/port in the UI.
+      "/resolume-api": {
+        target: "http://127.0.0.1:8080",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/resolume-api/, ""),
+      },
+    },
+  },
   plugins: [
     base44({
       // Support for legacy code that imports the base44 SDK with @/integrations, @/entities, etc.

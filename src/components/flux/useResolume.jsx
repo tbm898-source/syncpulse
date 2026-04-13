@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { getResolumeApiBase } from "@/lib/resolumeApi";
 
 const DEFAULT_HOST = "localhost";
-const DEFAULT_PORT = 8080; // Resolume Web API default port
+const DEFAULT_PORT = 8080; // Resolume Web Remote HTTP API (not OSC — that is usually UDP ~7000)
 
 /**
  * Hook that polls the Resolume Arena Web API and exposes composition state + actions.
- * Resolume Web API base: http://{host}:{port}/api/v1
+ * Base URL from getResolumeApiBase (supports VITE_RESOLUME_PROXY_PREFIX for dev/CORS).
  */
 export function useResolume(host = DEFAULT_HOST, port = DEFAULT_PORT, pollMs = 2000) {
   const [composition, setComposition] = useState(null);
@@ -15,7 +16,7 @@ export function useResolume(host = DEFAULT_HOST, port = DEFAULT_PORT, pollMs = 2
   const [loading, setLoading] = useState(false);
   const intervalRef = useRef(null);
 
-  const base = `http://${host}:${port}/api/v1`;
+  const base = getResolumeApiBase(host, port);
 
   const fetchComposition = useCallback(async () => {
     setLoading(true);
