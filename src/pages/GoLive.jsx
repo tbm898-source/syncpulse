@@ -3,18 +3,30 @@ import { base44 } from "@/api/base44Client";
 import { Radio, Square, Cpu, Music, Zap, CheckCircle, AlertCircle } from "lucide-react";
 import PlatformBadge from "../components/flux/PlatformBadge";
 import AudioVisualizer from "../components/flux/AudioVisualizer";
+import BridgeStatusBanner from "../components/flux/BridgeStatusBanner";
+import { useBridgeStatus } from "@/hooks/useBridgeStatus";
 
 const CHECKLIST = [
-  { id: "resolume", label: "Resolume Arena running", desc: "OSC bridge reachable on configured port" },
-  { id: "audio", label: "Audio signal detected", desc: "Input device active and levels OK" },
+  { id: "bridge", label: "SyncPulse local bridge", desc: "Trusted service on this streaming computer" },
+  { id: "obs", label: "OBS connected", desc: "WebSocket scenes, sources, and stream state" },
   { id: "platforms", label: "Platforms configured", desc: "At least one stream destination enabled" },
-  { id: "kinect", label: "Kinect sensor (optional)", desc: "Depth stream available" },
+  { id: "audio", label: "Audio path ready", desc: "OBS reports an active audio input when bridge is live" },
+  { id: "resolume", label: "Resolume Arena (optional)", desc: "Visual output adapter not wired yet" },
+  { id: "kinect", label: "Kinect sensor (optional)", desc: "Pipeline health adapter not wired yet" },
 ];
 
 export default function GoLive() {
+  const { bridge, obs } = useBridgeStatus();
   const [session, setSession] = useState(null);
   const [platforms, setPlatforms] = useState([]);
-  const [checks, setChecks] = useState({ resolume: false, audio: false, platforms: false, kinect: false });
+  const [checks, setChecks] = useState({
+    bridge: false,
+    obs: false,
+    audio: false,
+    platforms: false,
+    resolume: false,
+    kinect: false
+  });
   const [form, setForm] = useState({ name: "", kinect_enabled: false, milkdrop_enabled: true, audio_enabled: true });
   const [loading, setLoading] = useState(false);
 
@@ -24,10 +36,25 @@ export default function GoLive() {
       setPlatforms(r);
       setChecks(c => ({ ...c, platforms: r.length > 0 }));
     });
-    // Simulate checks
-    setTimeout(() => setChecks(c => ({ ...c, audio: true })), 800);
-    setTimeout(() => setChecks(c => ({ ...c, resolume: true })), 1400);
   }, []);
+
+  useEffect(() => {
+    const bridgeOk = bridge.available && (bridge.state === "connected" || bridge.state === "stale");
+    const obsOk = bridgeOk && obs?.state === "connected" && !obs?.stale;
+    const audioOk =
+      obsOk &&
+      Array.isArray(obs?.sources) &&
+      obs.sources.some((source) => /audio|wasapi|coreaudio|pulse/i.test(source.kind));
+
+    setChecks((current) => ({
+      ...current,
+      bridge: bridgeOk,
+      obs: obsOk,
+      audio: audioOk,
+      resolume: false,
+      kinect: false
+    }));
+  }, [bridge, obs]);
 
   const goLive = async () => {
     setLoading(true);
@@ -55,7 +82,7 @@ export default function GoLive() {
   };
 
   const isLive = session?.status === "live";
-  const allGood = checks.resolume && checks.audio && checks.platforms;
+  const allGood = checks.bridge && checks.obs && checks.platforms && checks.audio;
 
   return (
     <div className="p-6 space-y-6 max-w-2xl mx-auto">
@@ -63,6 +90,8 @@ export default function GoLive() {
         <h1 className="text-2xl font-bold text-white">Go Live</h1>
         <p className="text-sm text-gray-500 mt-0.5">Pre-flight checks and stream launch</p>
       </div>
+
+      <BridgeStatusBanner bridge={bridge} obs={obs} />
 
       {/* Pre-flight */}
       <div className="bg-[#111118] border border-[#1e1e2e] rounded-xl p-5 space-y-3">

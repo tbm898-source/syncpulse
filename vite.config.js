@@ -15,6 +15,12 @@ export default defineConfig({
         secure: false,
         rewrite: (path) => path.replace(/^\/resolume-api/, ""),
       },
+      "/bridge-api": {
+        target: "http://127.0.0.1:9284",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/bridge-api/, ""),
+      },
     },
   },
   plugins: [

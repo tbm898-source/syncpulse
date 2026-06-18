@@ -202,14 +202,23 @@ Requirements:
 
 - Node.js 18+
 - Base44 application configuration
-- Windows streaming computer for the full future integration path
+- Windows streaming computer for OBS bridge integration
 
-Install and run:
+Install and run the UI:
 
 ```bash
 npm install
 npm run dev
 ```
+
+Run the local bridge (on the streaming computer, with OBS WebSocket enabled):
+
+```bash
+npm run bridge:install
+npm run bridge:dev
+```
+
+See [bridge/README.md](bridge/README.md) for API details.
 
 Optional Base44 environment values:
 

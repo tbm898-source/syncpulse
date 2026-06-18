@@ -1,0 +1,26 @@
+{
+  "name": "@syncpulse/local-bridge",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "SyncPulse local bridge — OBS WebSocket and streaming computer integrations",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --config vitest.config.ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.14.3",
+    "hono": "^4.7.10",
+    "obs-websocket-js": "^5.0.6",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.5",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.9"
+  }
+}
